@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Books</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>All Books</h1>
+    <table id="books-table" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically populated by the servlet -->
+        </tbody>
+    </table>
+    <script>
+        // JavaScript to handle book deletion and opening edit forms
+        function deleteBook(id) {
+            fetch('delete-book', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `id=${id}`
+            }).then(response => response.text())
+              .then(message => alert(message))
+              .then(() => location.reload());
+        }
+
+        function editBook(id, title, author, price) {
+            const formHtml = `
+                <form action="edit-book" method="post">
+                    <input type="hidden" name="id" value="${id}">
+                    <label>Title:</label>
+                    <input type="text" name="title" value="${title}" required><br>
+                    <label>Author:</label>
+                    <input type="text" name="author" value="${author}" required><br>
+                    <label>Price:</label>
+                    <input type="text" name="price" value="${price}" required><br>
+                    <button type="submit">Save Changes</button>
+                </form>
+            `;
+            document.body.innerHTML += `<div class="modal">${formHtml}</div>`;
+        }
+    </script>
+</body>
+</html>
